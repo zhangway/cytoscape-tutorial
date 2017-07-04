@@ -10,7 +10,7 @@ import play.api.libs.json.{JsPath, Writes}
 import play.api.mvc._
 
 case class NData(id: String, label: String)
-case class EData(id: String, source: String, target:String)
+case class EData(id: String, source: String, target:String, width: Int)
 case class NodeData(ndata: NData)
 case class EdgeData(edata: EData)
 
@@ -38,7 +38,8 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
   implicit val eDataWrites: Writes[EData] = (
     (JsPath \ "id").write[String] and
     (JsPath \ "source").write[String] and
-    (JsPath \ "target").write[String]
+    (JsPath \ "target").write[String] and
+    (JsPath \ "width").write[Int]
   )(unlift(EData.unapply))
 
   implicit val nodeDataWrites: Writes[NodeData] =
@@ -69,11 +70,11 @@ class HomeController @Inject()(cc: ControllerComponents) extends AbstractControl
 
 
     val edges: Seq[EdgeData] = Seq(
-      EdgeData(EData("ab", "a", "b")),
-      EdgeData(EData("cd", "c", "d")),
-      EdgeData(EData("ef", "e", "f")),
-      EdgeData(EData("ac", "a", "c")),
-      EdgeData(EData("be", "b", "e"))
+      EdgeData(EData("ab", "a", "b", 4)),
+      EdgeData(EData("cd", "c", "d", 2)),
+      EdgeData(EData("ef", "e", "f", 6)),
+      EdgeData(EData("ac", "a", "c", 10)),
+      EdgeData(EData("be", "b", "e", 20))
     )
 
     val cytoscapeData = CytoscapeData(nodes, edges)
